@@ -10,8 +10,8 @@ import ProLayout, {
   Settings,
   DefaultFooter,
 } from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
-import Link from 'umi/link';
+import React, { useEffect } from 'react';
+import { Link } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { Icon, Result, Button } from 'antd';
@@ -55,22 +55,22 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
-// const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-//   menuList.map(item => {
-//     const localItem = {
-//       ...item,
-//       children: item.children ? menuDataRender(item.children) : [],
-//     };
-//     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-//   });
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
+  menuList.map(item => {
+    const localItem = {
+      ...item,
+      children: item.children ? menuDataRender(item.children) : [],
+    };
+    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
+  });
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2020 澳洲华人生活指南技术部出品"
+    copyright="2019 蚂蚁金服体验技术部出品"
     links={[
       {
-        key: 'Living Guide PYT',
-        title: 'Living Guide PYT',
+        key: 'Ant Design Pro',
+        title: 'Ant Design Pro',
         href: 'https://pro.ant.design',
         blankTarget: true,
       },
@@ -81,8 +81,8 @@ const defaultFooterDom = (
         blankTarget: true,
       },
       {
-        key: 'Living Guide',
-        title: 'Living Guide',
+        key: 'Ant Design',
+        title: 'Ant Design',
         href: 'https://ant.design',
         blankTarget: true,
       },
@@ -117,23 +117,14 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings, location = { pathname: '/' } } = props;
-
   /**
    * constructor
    */
-  const [menuData, setMenuData] = useState([]);
 
   useEffect(() => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
-      });
-
-      dispatch({
-        type: 'menu/getMenuData',
-        callback: (response: any) => {
-          setMenuData(response || []);
-        },
       });
     }
   }, []);
@@ -188,7 +179,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         );
       }}
       footerRender={footerRender}
-      menuDataRender={() => menuData}
+      menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
       {...props}
@@ -201,8 +192,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 };
 
-export default connect(({ global, settings, menu }: ConnectState) => ({
+export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
-  menuData: menu.menuData,
 }))(BasicLayout);
