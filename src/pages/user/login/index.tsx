@@ -89,8 +89,8 @@ class Login extends Component<LoginProps, LoginState> {
   );
 
   render() {
-    const { userLogin = {}, submitting } = this.props;
-    const { status, type: loginType } = userLogin;
+    const { userLogin, submitting } = this.props;
+    const { status, errMsg, type: loginType } = userLogin;
     const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
@@ -106,9 +106,7 @@ class Login extends Component<LoginProps, LoginState> {
             {status === 'error' &&
               loginType === 'account' &&
               !submitting &&
-              this.renderMessage(
-                formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
-              )}
+              this.renderMessage(errMsg)}
             <UserName
               name="userName"
               placeholder={`${formatMessage({ id: 'user-login.login.userName' })}: admin or user`}

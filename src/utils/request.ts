@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+// import Constants from '@/constant';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -53,4 +54,14 @@ const request = extend({
   // credentials: 'include', // 默认请求是否带上cookie
 });
 
+request.interceptors.request.use((url: string, options?: any) => {
+  if (localStorage.getItem('token')) {
+    // eslint-disable-next-line no-param-reassign
+    options.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  }
+
+  // eslint-disable-next-line no-console
+  console.log('url', url);
+  return { url, options };
+});
 export default request;

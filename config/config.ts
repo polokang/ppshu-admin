@@ -77,17 +77,12 @@ export default {
     {
       path: '/user',
       component: '../layouts/UserLayout',
+      // authority: ['admin', 'user'],
       routes: [
         {
           name: 'login',
           path: '/user/login',
           component: './user/login',
-        },
-        {
-          name: '注册页',
-          icon: 'smile',
-          path: '/userregister',
-          component: './UserRegister',
         },
       ],
     },
@@ -98,7 +93,6 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
@@ -110,25 +104,6 @@ export default {
               icon: 'smile',
               component: './Welcome',
             },
-            {
-              name: '会员商铺管理',
-              icon: 'shop',
-              path: '/busi',
-              component: './Busi/busiList',
-            },
-            // {
-            //   path: '/admin',
-            //   name: 'admin',
-            //   icon: 'crown',
-            //   component: './Admin',
-            //   authority: ['admin'],
-            // },
-            // {
-            //   name: 'admin',
-            //   icon: 'smile',
-            //   path: '/emptypage',
-            //   component: './EmptyPage',
-            // },
             {
               component: './404',
             },

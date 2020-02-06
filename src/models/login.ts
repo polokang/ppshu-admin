@@ -10,6 +10,7 @@ import { getPageQuery } from '@/utils/utils';
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
+  errMsg: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 }
 
@@ -31,6 +32,7 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
+    errMsg: '',
   },
 
   effects: {
@@ -42,6 +44,9 @@ const Model: LoginModelType = {
       });
       // Login successfully
       if (response.status === 'ok') {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+        }
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -86,6 +91,7 @@ const Model: LoginModelType = {
         ...state,
         status: payload.status,
         type: payload.type,
+        errMsg: payload,
       };
     },
   },
